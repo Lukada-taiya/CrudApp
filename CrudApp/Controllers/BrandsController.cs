@@ -1,6 +1,9 @@
-﻿using CrudApp.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using CrudApp.Application.DTOs;
+using CrudApp.Application.Commands.Request;
+using CrudApp.Application.Queries.Request;
 
 namespace CrudApp.Controllers
 {
@@ -8,74 +11,50 @@ namespace CrudApp.Controllers
     [ApiController]
     public class BrandsController : Controller
     {
-        private readonly BrandContext _brandContext;
+        private readonly IMediator _mediator;
 
-        public BrandsController(BrandContext brandContext)
+        public BrandsController(IMediator mediator)
         {
-            _brandContext = brandContext;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Brand>>> GetAllBrands()
+        public async Task<IActionResult> GetAllBrands()
         {
-            if (_brandContext.Brands == null) return NotFound();
-
-            var brands = await _brandContext.Brands.ToListAsync();
-            return Ok(brands);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Brand>> GetBrand(int id)
-        {
-            if (_brandContext.Brands == null) return NotFound();
-
-            var brand = await _brandContext.Brands.FindAsync(id);
-            return Ok(brand);
+            var response = await _mediator.Send(new GetAllBrandsRequest { });
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Brand>> PostBrand(Brand brand)
+        public async Task<IActionResult> CreateBrand(CreateBrandDto dto)
         {
-            _brandContext.Brands.Add(brand);
-            await _brandContext.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetBrand), new { id = brand.BrandIdpk }, brand);
+            if (dto is null) return BadRequest();
+            var response = await _mediator.Send(new CreateBrandCommand
+            {
+                CreateBrandDto = dto
+            });
+            return Ok(response);
         }
 
         [HttpPut]
-        public async Task<ActionResult> PutBrand(int id, Brand brand)
+        public async Task<IActionResult> UpdateBrand(UpdateBrandDto dto)
         {
-            if(id != brand.BrandIdpk) return BadRequest();
-            _brandContext.Entry(brand).State = EntityState.Modified;
-
-            try
-            {
-                await _brandContext.SaveChangesAsync();
-            }catch (DbUpdateConcurrencyException)
-            {
-                if (!BrandAvailable(id)) return NotFound();
-                throw;
-            }
-
-            return Ok();
+            if (dto is null) return BadRequest();
+            var response = await _mediator.Send(new UpdateBrandCommand {
+            BrandDto = dto
+            });
+            return Ok(response);
         }
 
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteBrand(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBrand(DeleteBrandDto dto)
         {
-            if (_brandContext.Brands == null) return NotFound();
-            var brand = await _brandContext.Brands.FindAsync(id);
-            if(brand == null) return NotFound();
-            _brandContext.Brands.Remove(brand);
-            await _brandContext.SaveChangesAsync();
-
-            return Ok();
-        }
-        
-        private bool BrandAvailable(int id)
-        {
-            return (_brandContext.Brands?.Any(x => x.BrandIdpk == id)).GetValueOrDefault();
+            if (dto is null) return BadRequest();
+            var response = await _mediator.Send(new DeleteBrandCommand
+            {
+                BrandDto = dto
+            });
+            return Ok(response);
         }
     }
 }
