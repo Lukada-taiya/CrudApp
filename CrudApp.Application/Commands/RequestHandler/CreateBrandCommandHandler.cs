@@ -11,7 +11,7 @@ using AutoMapper;
 
 namespace CrudApp.Application.Commands.RequestHandler
 {
-    public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, int>
+    public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, ApiResponse>
     {
         private readonly IGenericRepository<Brand> _genericRepository;
         private readonly IMapper _mapper;
@@ -21,12 +21,27 @@ namespace CrudApp.Application.Commands.RequestHandler
             _mapper = mapper;
             _genericRepository = genericRepository;
         }
-        public async Task<int> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
         {
             var brand = _mapper.Map<Brand>(request.CreateBrandDto);
             FormattableString sqlCommand = $"[dbo].[spcCreateBrand] @Name = {brand.Name}, @Category= {brand.Category}, @IsActive={brand.isActive}";
             
-            return await _genericRepository.Add(sqlCommand);
+            var response = await _genericRepository.Add(sqlCommand);
+
+            if(response > 0)
+            {
+                return new ApiResponse()
+                {
+                    isStatus = true,
+                    Message = "Record has been saved successfully"
+                };
+            }
+
+            return new ApiResponse()
+            {
+                isStatus = false,
+                Message = "Record was unable to save"
+            };
         }
     }
 }

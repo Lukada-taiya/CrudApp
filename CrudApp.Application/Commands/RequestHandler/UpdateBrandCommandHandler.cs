@@ -10,7 +10,7 @@ using MediatR;
 
 namespace CrudApp.Application.Commands.RequestHandler
 {
-    public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand, int>
+    public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand, ApiResponse>
     {
 
         private readonly IGenericRepository<Brand> _genericRepository;
@@ -21,12 +21,26 @@ namespace CrudApp.Application.Commands.RequestHandler
             _mapper = mapper;
             _genericRepository = genericRepository;
         }
-        public async Task<int> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
         {
             var brand = _mapper.Map<Brand>(request.BrandDto);
             FormattableString sql = $"[dbo].[spcUpdateBrand] @BrandIdpk = {request.BrandIdpk}, @Name = {brand.Name}, @Category = {brand.Category}, @IsActive = {brand.isActive}";
 
-            return await _genericRepository.Update(sql);
+            var response = await _genericRepository.Update(sql);
+            if (response > 0)
+            {
+                return new ApiResponse()
+                {
+                    isStatus = true,
+                    Message = "Record has been saved successfully"
+                };
+            }
+
+            return new ApiResponse()
+            {
+                isStatus = false,
+                Message = "Record was unable to save"
+            };
         }
     }
 }

@@ -10,7 +10,7 @@ using MediatR;
 
 namespace CrudApp.Application.Commands.RequestHandler
 {
-    public class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand, int>
+    public class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand, ApiResponse>
     {
 
         private readonly IGenericRepository<Brand> _genericRepository;
@@ -21,10 +21,24 @@ namespace CrudApp.Application.Commands.RequestHandler
             _mapper = mapper;
             _genericRepository = genericRepository;
         }
-        public async Task<int> Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse> Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
         {  
             FormattableString sql = $"[dbo].[spcDeleteBrand] @BrandIdpk = {request.BrandIdpk}";
-            return await _genericRepository.Delete(sql);
+            var response = await _genericRepository.Delete(sql);
+            if (response > 0)
+            {
+                return new ApiResponse()
+                {
+                    isStatus = true,
+                    Message = "Record has been saved successfully"
+                };
+            }
+
+            return new ApiResponse()
+            {
+                isStatus = false,
+                Message = "Record was unable to save"
+            };
         }
     }
 }

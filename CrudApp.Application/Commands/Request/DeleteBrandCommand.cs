@@ -8,7 +8,7 @@ using MediatR;
 
 namespace CrudApp.Application.Commands.Request
 {
-    public class DeleteBrandCommand : IRequest<int>
+    public class DeleteBrandCommand : IRequest<ApiResponse>
     {
         public int BrandIdpk { get; set; }
     }
