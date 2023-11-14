@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CrudApp.Application;
-using CrudApp.Infrastructure;
-using Microsoft.EntityFrameworkCore; 
+using CrudApp.Domain.Models;
+using CrudApp.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CrudApp.Infrastructure.Persistence
 {
@@ -30,6 +31,12 @@ namespace CrudApp.Infrastructure.Persistence
             var result = _brandContext.Database.ExecuteSqlInterpolated(query);
             await _brandContext.SaveChangesAsync();
             return result;
+        }
+
+        public async Task<TEntity> Get(FormattableString sqlQuery)
+        {
+            List<TEntity> query = await _brandContext.Set<TEntity>().FromSqlInterpolated(sqlQuery).AsNoTracking().ToListAsync();
+            return query.FirstOrDefault()!;
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(string query)

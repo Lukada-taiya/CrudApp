@@ -10,6 +10,8 @@ namespace CrudApp.Application
     {
         Task<int> Add(FormattableString sqlQuery);
         Task<IEnumerable<TEntity>> GetAllAsync(string query);
+
+        Task<TEntity> Get(FormattableString query);
         Task<int> Update(FormattableString sqlQuery);
 
         Task<int> Delete(FormattableString query);

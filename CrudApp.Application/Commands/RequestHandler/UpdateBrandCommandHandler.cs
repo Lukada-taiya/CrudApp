@@ -24,7 +24,7 @@ namespace CrudApp.Application.Commands.RequestHandler
         public async Task<int> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
         {
             var brand = _mapper.Map<Brand>(request.BrandDto);
-            FormattableString sql = $"[dbo].[spcUpdateBrand] @Name = {brand.Name}, @Category = {brand.Category}, @IsActive = {brand.isActive}";
+            FormattableString sql = $"[dbo].[spcUpdateBrand] @BrandIdpk = {request.BrandIdpk}, @Name = {brand.Name}, @Category = {brand.Category}, @IsActive = {brand.isActive}";
 
             return await _genericRepository.Update(sql);
         }

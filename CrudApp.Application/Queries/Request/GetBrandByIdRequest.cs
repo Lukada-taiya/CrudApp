@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CrudApp.Application.DTOs;
+using MediatR;
 
-namespace CrudApp.Application.DTOs
+namespace CrudApp.Application.Queries.Request
 {
-    public class DeleteBrandDto
+    public class GetBrandByIdRequest: IRequest<GetBrandDto>
     {
         public int BrandIdpk { get; set; }
     }

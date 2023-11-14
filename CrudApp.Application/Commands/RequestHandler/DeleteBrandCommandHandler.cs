@@ -22,9 +22,8 @@ namespace CrudApp.Application.Commands.RequestHandler
             _genericRepository = genericRepository;
         }
         public async Task<int> Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
-        {
-            var brand = _mapper.Map<Brand>(request.BrandDto);
-            FormattableString sql = $"[dbo].[spcDeleteBrand] @BrandIdpk = {brand.BrandIdpk}";
+        {  
+            FormattableString sql = $"[dbo].[spcDeleteBrand] @BrandIdpk = {request.BrandIdpk}";
             return await _genericRepository.Delete(sql);
         }
     }

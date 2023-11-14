@@ -1,6 +1,6 @@
 
 using CrudApp;
-using CrudApp.Infrastructure;
+using CrudApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

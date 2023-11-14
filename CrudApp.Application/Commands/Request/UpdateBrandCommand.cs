@@ -9,7 +9,8 @@ using MediatR;
 namespace CrudApp.Application.Commands.Request
 {
     public class UpdateBrandCommand : IRequest<int>
-    { 
+    {
+        public int BrandIdpk { get; set; }
         public UpdateBrandDto BrandDto { get; set; }
     }
 }

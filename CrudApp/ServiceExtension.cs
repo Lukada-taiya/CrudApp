@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿//using System.Reflection;
+using System.Reflection;
 using CrudApp.Application;
 using CrudApp.Infrastructure.Persistence;
 
@@ -8,7 +9,8 @@ namespace CrudApp
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            //services.AddAutoMapper(Assembly.GetExecutingAssembly()); 
+            services.AddAutoMapper(typeof(Program).Assembly); 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
             return services;
         }
@@ -20,3 +22,4 @@ namespace CrudApp
         }
     }
 }
+ 

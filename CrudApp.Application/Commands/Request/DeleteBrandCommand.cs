@@ -10,6 +10,6 @@ namespace CrudApp.Application.Commands.Request
 {
     public class DeleteBrandCommand : IRequest<int>
     {
-        public DeleteBrandDto BrandDto { get; set; }
+        public int BrandIdpk { get; set; }
     }
 }
