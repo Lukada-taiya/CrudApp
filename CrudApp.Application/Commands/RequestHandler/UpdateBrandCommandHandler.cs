@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using CrudApp.Application.Behaviours;
 using CrudApp.Application.Commands.Request;
 using CrudApp.Domain.Models;
 using MediatR;
@@ -23,6 +24,11 @@ namespace CrudApp.Application.Commands.RequestHandler
         }
         public async Task<ApiResponse> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
         {
+            var validator = new UpdateBrandDtoValidator();
+            var validationResult = validator.Validate(request.BrandDto);
+
+            if (!validationResult.IsValid) throw new Exception();
+
             var brand = _mapper.Map<Brand>(request.BrandDto);
             FormattableString sql = $"[dbo].[spcUpdateBrand] @BrandIdpk = {request.BrandIdpk}, @Name = {brand.Name}, @Category = {brand.Category}, @IsActive = {brand.isActive}";
 

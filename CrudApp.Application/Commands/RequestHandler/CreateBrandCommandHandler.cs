@@ -18,7 +18,7 @@ namespace CrudApp.Application.Commands.RequestHandler
         private readonly IGenericRepository<Brand> _genericRepository;
         private readonly IMapper _mapper; 
 
-        public CreateBrandCommandHandler(IGenericRepository<Brand> genericRepository, IMapper mapper, IValidator validator)
+        public CreateBrandCommandHandler(IGenericRepository<Brand> genericRepository, IMapper mapper)
         {
             _mapper = mapper;
             _genericRepository = genericRepository; 

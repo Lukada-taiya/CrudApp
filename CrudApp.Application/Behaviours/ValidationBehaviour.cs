@@ -16,11 +16,9 @@ namespace CrudApp.Application.Behaviours
             RuleFor(p => p.Name).NotNull().NotEmpty().WithMessage("{PropertyName} is required");
 
             RuleFor(p => p.Category).NotNull().NotEmpty().WithMessage("{PropertyName} is required");
-            RuleFor(p => p.isActive).NotEmpty().WithMessage("{PropertyName} is required")
-                .LessThan(2).WithMessage("{PropertyName} must be between 0 and 1")
-                .GreaterThan(2).WithMessage("{PropertyName} must be between 0 and 1");
-
-
+            RuleFor(p => p.isActive)
+                .LessThanOrEqualTo(1).WithMessage("{PropertyName} must be either 0 or 1")
+                .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} must be either 0 or 1");
         }
     }
 
@@ -32,26 +30,8 @@ namespace CrudApp.Application.Behaviours
             RuleFor(p => p.Name).NotNull().NotEmpty().WithMessage("{PropertyName} is required");
 
             RuleFor(p => p.Category).NotNull().NotEmpty().WithMessage("{PropertyName} is required");
-            RuleFor(p => p.isActive).NotEmpty().WithMessage("{PropertyName} is required")
-                .LessThan(2).WithMessage("{PropertyName} must be between 0 and 1")
-                .GreaterThan(2).WithMessage("{PropertyName} must be between 0 and 1");
-
-
-        }
-    }
-
-    public class GetBrandDtoValidator : AbstractValidator<GetBrandDto>
-    {
-
-        public GetBrandDtoValidator()
-        {
-            RuleFor(p => p.BrandIdpk).NotEmpty();
-            RuleFor(p => p.Name).NotNull().NotEmpty().WithMessage("{PropertyName} is required");
-
-            RuleFor(p => p.Category).NotNull().NotEmpty().WithMessage("{PropertyName} is required");
-            RuleFor(p => p.isActive).NotEmpty().WithMessage("{PropertyName} is required")
-                .LessThan(2).WithMessage("{PropertyName} must be between 0 and 1")
-                .GreaterThan(2).WithMessage("{PropertyName} must be between 0 and 1");
+            RuleFor(p => p.isActive).LessThanOrEqualTo(1).WithMessage("{PropertyName} must be either 0 or 1")
+                .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} must be either 0 or 1");
         }
     }
 }

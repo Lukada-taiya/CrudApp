@@ -15,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices();
 builder.Services.AddRepositories();
-//builder.Services.AddValidators();
+builder.Services.AddValidators();
 
 
 var app = builder.Build();
