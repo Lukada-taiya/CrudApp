@@ -13,15 +13,10 @@ using CrudApp.Application.Behaviours;
 
 namespace CrudApp.Application.Commands.RequestHandler
 {
-    public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, ApiResponse>
+    public class CreateBrandCommandHandler : GenericConstructor<Brand>, IRequestHandler<CreateBrandCommand, ApiResponse>
     {
-        private readonly IGenericRepository<Brand> _genericRepository;
-        private readonly IMapper _mapper; 
-
-        public CreateBrandCommandHandler(IGenericRepository<Brand> genericRepository, IMapper mapper)
-        {
-            _mapper = mapper;
-            _genericRepository = genericRepository; 
+        public CreateBrandCommandHandler(IGenericRepository<Brand> genericRepository, IMapper mapper) : base(mapper,genericRepository)
+        { 
         }
         public async Task<ApiResponse> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
         {
@@ -33,7 +28,7 @@ namespace CrudApp.Application.Commands.RequestHandler
             var brand = _mapper.Map<Brand>(request.CreateBrandDto);
             FormattableString sqlCommand = $"[dbo].[spcCreateBrand] @Name = {brand.Name}, @Category= {brand.Category}, @IsActive={brand.isActive}";
             
-            var response = await _genericRepository.Add(sqlCommand);
+            var response = await _repository.Add(sqlCommand);
 
             if(response > 0)
             {

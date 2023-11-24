@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CrudApp.Application.DTOs;
+﻿using CrudApp.Application.DTOs;
 using FluentValidation;
 
 namespace CrudApp.Application.Behaviours
@@ -34,4 +29,9 @@ namespace CrudApp.Application.Behaviours
                 .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} must be either 0 or 1");
         }
     }
+
+    //public class GetBrandByIdCommandValidator : AbstractValidator<> {
+    //}
+
+
 }

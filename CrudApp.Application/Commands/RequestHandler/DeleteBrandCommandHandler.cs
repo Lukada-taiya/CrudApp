@@ -10,21 +10,15 @@ using MediatR;
 
 namespace CrudApp.Application.Commands.RequestHandler
 {
-    public class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand, ApiResponse>
-    {
-
-        private readonly IGenericRepository<Brand> _genericRepository;
-        private readonly IMapper _mapper;
-
-        public DeleteBrandCommandHandler(IGenericRepository<Brand> genericRepository, IMapper mapper)
-        {
-            _mapper = mapper;
-            _genericRepository = genericRepository;
+    public class DeleteBrandCommandHandler : GenericConstructor<Brand>, IRequestHandler<DeleteBrandCommand, ApiResponse>
+    {         
+        public DeleteBrandCommandHandler(IGenericRepository<Brand> genericRepository, IMapper mapper) :base(mapper, genericRepository)
+        { 
         }
         public async Task<ApiResponse> Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
         {  
             FormattableString sql = $"[dbo].[spcDeleteBrand] @BrandIdpk = {request.BrandIdpk}";
-            var response = await _genericRepository.Delete(sql);
+            var response = await _repository.Delete(sql);
             if (response > 0)
             {
                 return new ApiResponse()

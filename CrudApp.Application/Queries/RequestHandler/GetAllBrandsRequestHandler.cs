@@ -6,21 +6,17 @@ using MediatR;
 
 namespace CrudApp.Application.Queries.RequestHandler
 {
-    public class GetAllBrandsRequestHandler : IRequestHandler<GetAllBrandsRequest, IEnumerable<GetBrandDto>>
+    public class GetAllBrandsRequestHandler : GenericConstructor<Brand>, IRequestHandler<GetAllBrandsRequest, IEnumerable<GetBrandDto>>
     {
-        private readonly IMapper _mapper;
-        private readonly IGenericRepository<Brand> _genericRepository;
-
-        public GetAllBrandsRequestHandler(IGenericRepository<Brand> genericRepository, IMapper mapper)
-        {
-            _genericRepository = genericRepository;
-            _mapper = mapper;
+        
+        public GetAllBrandsRequestHandler(IGenericRepository<Brand> genericRepository, IMapper mapper) : base(mapper, genericRepository)
+        { 
         }
 
         public async Task<IEnumerable<GetBrandDto>> Handle(GetAllBrandsRequest request, CancellationToken cancellationToken)
         {
             var sql = $"[dbo].[spcGetBrands]";
-            var brands = await _genericRepository.GetAllAsync(sql);
+            var brands = await _repository.GetAllAsync(sql);
             return _mapper.Map<IEnumerable<GetBrandDto>>(brands);
         }
     }
