@@ -33,14 +33,14 @@ namespace CrudApp.Application.Commands.RequestHandler
                 return new ApiResponse()
                 {
                     isStatus = true,
-                    Message = "Record has been saved successfully"
+                    Message = "Brand has been updated successfully."
                 };
             }
 
             return new ApiResponse()
             {
                 isStatus = false,
-                Message = "Record was unable to save"
+                Message = "Brand was unable to be updated. Try Again."
             };
         }
     }

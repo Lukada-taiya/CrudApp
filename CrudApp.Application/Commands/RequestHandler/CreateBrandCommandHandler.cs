@@ -35,14 +35,14 @@ namespace CrudApp.Application.Commands.RequestHandler
                 return new ApiResponse()
                 {
                     isStatus = true,
-                    Message = "Record has been saved successfully"
+                    Message = "Brand has been created successfully."
                 };
             }
 
             return new ApiResponse()
             {
                 isStatus = false,
-                Message = "Record was unable to save"
+                Message = "Unable to create brand. Try again."
             };
         }
     }
